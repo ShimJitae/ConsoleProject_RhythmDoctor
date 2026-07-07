@@ -52,15 +52,26 @@ namespace RhythmDoctor.Managers
 
             for (int i = 0; i < 16; i++)
             {
+                /// 박자마다 IsWithinHitWindow를 false로 전환해줌
+                /// 플레이어의 인풋을 받는 타이밍을 설정하는 것은 b_Events에서 전환해줌
+                IsWithinHitWindow = false;
+
                 targetTime = sixteenthBeatTime * i;
 
-                while (stopwatch.Elapsed.TotalSeconds < targetTime)
+                b_Events[i]?.Play(); // 비트이벤트가 null이 아닐 경우에만 Play
+                while (stopwatch.Elapsed.TotalSeconds < targetTime) // 비트 이벤트를 실행하고 반의 반박자만큼 대기
                 {
-                    b_Events[i]?.Play(); // 비트이벤트가 null이 아닐 경우에만 Play
-                }
+                    Thread.Sleep(1); // while문이 CPU를 계속 쓰지 않도록 현재 스레드를 잠깐 쉬게 한다 -> 최적화
+                } 
 
                 Console.WriteLine($"{i + 1}번째 반의 반박자");
             }
         }
+
+        /// <summary>
+        /// 현재 박자가 플레이어의 인풋을 받았을 때, 맞는 타이밍인지 확인하는 bool 프로퍼티
+        /// IsWithinHitWindow가 true일 때, 플레이어의 인풋이 들어오면(ex 스페이스바), 맞는 타이밍에 누른거임
+        /// </summary>
+        public bool IsWithinHitWindow { get; set; }
     }
 }
