@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Core.BeatEvents;
 
 namespace RhythmDoctor.Managers
 {
@@ -30,7 +31,7 @@ namespace RhythmDoctor.Managers
         /// PlayOneMeasure()에서는 한 박자를 기준으로 만들어진 메서드
         /// for문에서 한 번에 반의 반박자 시간만큼 시간을 감지하고, 이를 16번 반복
         /// </summary>
-        public void PlayOneMeasure()
+        public void PlayOneMeasure(BeatEvent[] b_Events)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
