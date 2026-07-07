@@ -63,5 +63,7 @@ namespace RhythmDoctor.Managers
             // StartGame을 할 때, 구독되어있던 게임 시작 로직들 모두 실행
             OnGameStart?.Invoke();
         }
+
+        public event Action OnGameOver;
     }
 }
