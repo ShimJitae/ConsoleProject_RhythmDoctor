@@ -37,10 +37,13 @@ namespace RhythmDoctor.Managers
             // IsGameOver는 게임이 실행하는 동안에만 false로 설정
             IsGameOver = true;
 
-            musicList = new();
+            musicList = new() { "Test" };
 
             // 게임이 시작할 때, IsGameOver = false가 되는 로직을 구독
             OnGameStart += () => IsGameOver = false;
+
+            // 게임에서 마우스 커서 반짝임은 필요 없음. GameManager에서 감출거임
+            Console.CursorVisible = false;
         }
         #endregion
 

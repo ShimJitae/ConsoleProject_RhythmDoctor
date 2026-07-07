@@ -49,6 +49,7 @@ namespace RhythmDoctor.Core
         /// PlayOneMeasure()에서는 한 박자를 기준으로 만들어진 메서드
         /// for문에서 한 번에 반의 반박자 시간만큼 시간을 감지하고, 이를 16번 반복
         /// </summary>
+        public bool ProcessingOneMeasure { get; set; } = false;
         public void PlayOneMeasure(BeatEvent[] b_Events)
         {
             #region b_Events 형식 검사
@@ -65,39 +66,44 @@ namespace RhythmDoctor.Core
                 return;
             }
             #endregion
+            ProcessingOneMeasure = true;
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             for (int i = 0; i < 16; i++)
             {
+                //테스트용 코드
+                TestClass.NextBeat();
+
                 // 박자마다 HitBeat를 false로 전환해줌
                 HitBeat = false;
                 // 플레이어의 인풋을 받는 타이밍을 설정하는 것은 b_Events에서 전환해줌
                 InputManager.Instance.HasInput = false;
 
-                targetTime = sixteenthBeatTime * i;
+                targetTime = sixteenthBeatTime * (i + 1);
 
-                b_Events[i]?.Play(); // 비트이벤트가 null이 아닐 경우에만 Play
-                while (stopwatch.Elapsed.TotalSeconds < targetTime) // 비트 이벤트를 실행하고 반의 반박자만큼 대기
+                b_Events[i]?.Play();
+
+                while (stopwatch.Elapsed.TotalSeconds < targetTime)
                 {
                     InputManager.Instance.Listen();
-                    Thread.Sleep(1); // while문이 CPU를 계속 쓰지 않도록 현재 스레드를 잠깐 쉬게 한다 -> 최적화
+                    Thread.Sleep(1);
                 }
 
                 if (HitBeat) // 히트 박스가 켜진 경우
                 {
                     if (InputManager.Instance.HasInput)
                     {
-                        // 플레이어의 인풋이 들어왔다면 성공
+                        TestClass.Count(true);
                     }
                     else
                     {
-                        // 들어오지 않았따면 실패
+                        TestClass.Count(false);
                     }
                 }
-
-                Console.WriteLine($"{i + 1}번째 반의 반박자");
             }
+
+            ProcessingOneMeasure = false;
         }
 
         /// <summary>
