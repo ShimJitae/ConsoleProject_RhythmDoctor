@@ -1,4 +1,4 @@
-namespace Core.BeatEvents {
+namespace RhythmDoctor.Core.BeatEvents {
     /// <summary>
     /// 비트이벤트는 한 마디의 16개의 반의 반박자마다 실행시킬 이벤트 종류이다.
     /// 각 박자마다 전달받은 이벤트를 실행한다.
