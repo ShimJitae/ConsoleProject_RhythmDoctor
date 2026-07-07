@@ -24,6 +24,7 @@ namespace RhythmDoctor.Managers
                     InputManager inputManager = InputManager.Instance;
 
                     CameraManager cameraManager = CameraManager.Instance;
+                    SoundManager soundManager = SoundManager.Instance;
                     #endregion
                 }
 

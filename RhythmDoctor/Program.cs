@@ -10,8 +10,15 @@ TestClass.Test();
 
 public static class TestClass
 {
-    static BeatEvent[] testEvents = new BeatEvent[16] { null!, null!, null!, null!, null!, null!, new ActiveHitBeat(), null!, null!, null!, null!, null!, null!, null!, new ActiveHitBeat(), null! };
-    static string testStr = "□ □ □ □ □ □ ■ □ □ □ □ □ □ □ ■ □";
+    static BeatEvent[] testEvents = new BeatEvent[16] 
+    { 
+        null, null, new ActiveHitBeat(), null,
+        null, null, new ActiveHitBeat(), null,
+        null, null, new ActiveHitBeat(), null,
+        null, null, new ActiveHitBeat(), null
+    };
+
+    static string testStr = "□ □ ■ □ □ □ ■ □ □ □ ■ □ □ □ ■ □";
     static int beatIndex = 0;
     static int arrowLine = -1;
     static int successLine = -1;
@@ -19,6 +26,7 @@ public static class TestClass
     static int logLine = -1;
     public static void Test()
     {
+        Thread.Sleep(1000);
         GameManager.Instance.StartGame();
 
         RhythmCore.Instance.SetRhythm(94);
@@ -42,7 +50,6 @@ public static class TestClass
 
             HideArrow();
             ClearLine(logLine);
-            Thread.Sleep(1000);
         }
     }
 
