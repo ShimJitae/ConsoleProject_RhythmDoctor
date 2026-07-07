@@ -22,6 +22,8 @@ namespace RhythmDoctor.Managers
                     // GameManager는 프로그램이 실행될 때, 반드시 제일 먼저 실행되도록
                     // 여기에 싱글톤들이 호출되어야 하는 순서에 맞게 싱글톤들의 인스턴스를 만들어줌
                     InputManager inputManager = InputManager.Instance;
+
+                    CameraManager cameraManager = CameraManager.Instance;
                     #endregion
                 }
 
@@ -65,5 +67,9 @@ namespace RhythmDoctor.Managers
         }
 
         public event Action OnGameOver;
+        public void GameOver()
+        {
+            OnGameOver?.Invoke();
+        }
     }
 }

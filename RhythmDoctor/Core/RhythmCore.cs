@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using Core.BeatEvents;
+using RhythmDoctor.Core.BeatEvents;
 using RhythmDoctor.Managers;
 
 namespace RhythmDoctor.Core
