@@ -17,6 +17,12 @@ namespace RhythmDoctor.Managers
                 if (instance == null)
                 {
                     instance = new GameManager();
+
+                    #region InitializeManagersInOrder
+                    // GameManager는 프로그램이 실행될 때, 반드시 제일 먼저 실행되도록
+                    // 여기에 싱글톤들이 호출되어야 하는 순서에 맞게 싱글톤들의 인스턴스를 만들어줌
+                    InputManager inputManager = InputManager.Instance;
+                    #endregion
                 }
 
                 return instance;
@@ -30,6 +36,9 @@ namespace RhythmDoctor.Managers
             IsGameOver = true;
 
             musicList = new();
+
+            // 게임이 시작할 때, IsGameOver = false가 되는 로직을 구독
+            OnGameStart += () => IsGameOver = false;
         }
         #endregion
 
@@ -46,11 +55,10 @@ namespace RhythmDoctor.Managers
         }
 
         public event Action OnGameStart;
+        public string SelectedMusic { get; set; }
         public void StartGame()
         {
-            IsGameOver = false;
-
-            string selectedMusic = musicList[selectedIndex];
+            SelectedMusic = musicList[selectedIndex];
 
             // StartGame을 할 때, 구독되어있던 게임 시작 로직들 모두 실행
             OnGameStart?.Invoke();
