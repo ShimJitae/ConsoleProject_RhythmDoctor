@@ -70,9 +70,9 @@ namespace RhythmDoctor.Core
 
             for (int i = 0; i < 16; i++)
             {
-                /// 박자마다 HitBeat를 false로 전환해줌
-                /// 플레이어의 인풋을 받는 타이밍을 설정하는 것은 b_Events에서 전환해줌
+                // 박자마다 HitBeat를 false로 전환해줌
                 HitBeat = false;
+                // 플레이어의 인풋을 받는 타이밍을 설정하는 것은 b_Events에서 전환해줌
                 InputManager.Instance.HasInput = false;
 
                 targetTime = sixteenthBeatTime * i;
@@ -101,7 +101,8 @@ namespace RhythmDoctor.Core
 
         /// <summary>
         /// HitBeat가 true일 때, 플레이어의 인풋을 받았야함
-        /// HitBeat가 true일 때, 해당 박자에 플레이어의 인풋이 들어오면(ex 스페이스바), 맞는 타이밍에 누른것이고, HitBeat가 true일 때, InputManager.Instance.HasInput가 false면 실패
+        /// HitBeat가 true일 때, 해당 박자에 플레이어의 인풋이 들어오면(ex 스페이스바), 맞는 타이밍에 누른것이고
+        /// HitBeat가 true일 때, InputManager.Instance.HasInput가 false면 실패
         /// </summary>
         public bool HitBeat { get; set; }
     }
