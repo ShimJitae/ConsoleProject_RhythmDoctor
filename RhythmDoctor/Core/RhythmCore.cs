@@ -4,10 +4,27 @@ using System.Diagnostics;
 using System.Text;
 using Core.BeatEvents;
 
-namespace RhythmDoctor.Managers
+namespace RhythmDoctor.Core
 {
-    public class RhythmManager
+    public class RhythmCore
     {
+        #region 싱글톤 패턴 적용
+        private static RhythmCore instance;
+
+        public static RhythmCore Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new RhythmCore();
+                }
+
+                return instance;
+            }
+        }
+        #endregion
+
         /// <summary>
         /// 현재 플레이할 음악의 리듬 타이밍을 세팅하는 단계
         /// 게임을 시작하기 전에 이 메서드를 실행시켜서 몇 bpm인지 설정해줘야함.
