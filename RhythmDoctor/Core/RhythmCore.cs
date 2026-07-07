@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Core.BeatEvents;
+using RhythmDoctor.Managers;
 
 namespace RhythmDoctor.Core
 {
@@ -69,9 +70,10 @@ namespace RhythmDoctor.Core
 
             for (int i = 0; i < 16; i++)
             {
-                /// 박자마다 IsWithinHitWindow를 false로 전환해줌
+                /// 박자마다 HitBeat를 false로 전환해줌
                 /// 플레이어의 인풋을 받는 타이밍을 설정하는 것은 b_Events에서 전환해줌
-                IsWithinHitWindow = false;
+                HitBeat = false;
+                InputManager.Instance.HasInput = false;
 
                 targetTime = sixteenthBeatTime * i;
 
@@ -79,16 +81,28 @@ namespace RhythmDoctor.Core
                 while (stopwatch.Elapsed.TotalSeconds < targetTime) // 비트 이벤트를 실행하고 반의 반박자만큼 대기
                 {
                     Thread.Sleep(1); // while문이 CPU를 계속 쓰지 않도록 현재 스레드를 잠깐 쉬게 한다 -> 최적화
-                } 
+                }
+
+                if (HitBeat) // 히트 박스가 켜진 경우
+                {
+                    if (InputManager.Instance.HasInput)
+                    {
+                        // 플레이어의 인풋이 들어왔다면 성공
+                    }
+                    else
+                    {
+                        // 들어오지 않았따면 실패
+                    }
+                }
 
                 Console.WriteLine($"{i + 1}번째 반의 반박자");
             }
         }
 
         /// <summary>
-        /// 현재 박자가 플레이어의 인풋을 받았을 때, 맞는 타이밍인지 확인하는 bool 프로퍼티
-        /// IsWithinHitWindow가 true일 때, 플레이어의 인풋이 들어오면(ex 스페이스바), 맞는 타이밍에 누른거임
+        /// HitBeat가 true일 때, 플레이어의 인풋을 받았야함
+        /// HitBeat가 true일 때, 해당 박자에 플레이어의 인풋이 들어오면(ex 스페이스바), 맞는 타이밍에 누른것이고, HitBeat가 true일 때, InputManager.Instance.HasInput가 false면 실패
         /// </summary>
-        public bool IsWithinHitWindow { get; set; }
+        public bool HitBeat { get; set; }
     }
 }
