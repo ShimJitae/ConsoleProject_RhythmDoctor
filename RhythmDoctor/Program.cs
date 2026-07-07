@@ -6,12 +6,38 @@ using System.Threading;
 CameraManager.Instance.ResizeGameWindow(640, 360);
 CameraManager.Instance.MoveGameWindowToCenter();
 
-TestClass.Test();
+Console.WriteLine("██████╗ ██╗  ██╗██╗   ██╗████████╗██╗  ██╗███╗   ███╗   ");
+Console.WriteLine("██╔══██╗██║  ██║╚██╗ ██╔╝╚══██╔══╝██║  ██║████╗ ████║     ");
+Console.WriteLine("██████╔╝███████║ ╚████╔╝    ██║   ███████║██╔████╔██║      ");
+Console.WriteLine("██╔══██╗██╔══██║  ╚██╔╝     ██║   ██╔══██║██║╚██╔╝██║     ");
+Console.WriteLine("██║  ██║██║  ██║   ██║      ██║   ██║  ██║██║ ╚═╝ ██║        ");
+Console.WriteLine("╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝╚═╝     ╚═╝       ");
+Console.WriteLine("         ██████╗  ██████╗  ██████╗████████╗ ██████╗ ██████╗ ");
+Console.WriteLine("         ██╔══██╗██╔═══██╗██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗");
+Console.WriteLine("         ██║  ██║██║   ██║██║        ██║   ██║   ██║██████╔╝");
+Console.WriteLine("         ██║  ██║██║   ██║██║        ██║   ██║   ██║██╔══██╗");
+Console.WriteLine("         ██████╔╝╚██████╔╝╚██████╗   ██║   ╚██████╔╝██║  ██║");
+Console.WriteLine("         ╚═════╝  ╚═════╝  ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TestClass.Test();
 
 public static class TestClass
 {
-    static BeatEvent[] testEvents = new BeatEvent[16] 
-    { 
+    static BeatEvent[] testEvents = new BeatEvent[16]
+    {
         null, null, new ActiveHitBeat(), null,
         null, null, new ActiveHitBeat(), null,
         null, null, new ActiveHitBeat(), null,
@@ -31,7 +57,7 @@ public static class TestClass
 
         RhythmCore.Instance.SetRhythm(94);
 
-        for(int i = 0; i< 15; i++)
+        for (int i = 0; i < 15; i++)
         {
             beatIndex = 0;
             Console.Clear();
@@ -77,9 +103,9 @@ public static class TestClass
 
     public static void Count(bool _suc)
     {
-        if (_suc) 
+        if (_suc)
             suc++;
-        else 
+        else
             fail++;
 
         PrintCount();
