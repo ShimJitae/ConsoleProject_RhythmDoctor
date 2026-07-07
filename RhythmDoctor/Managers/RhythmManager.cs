@@ -33,6 +33,17 @@ namespace RhythmDoctor.Managers
         /// </summary>
         public void PlayOneMeasure(BeatEvent[] b_Events)
         {
+            if(b_Events == null)
+            {
+                Console.WriteLine("※ RhythmManager : PlayOneMeasure에서 b_Events로 Null을 받음");
+                return;
+            }
+            if (b_Events.Length != 16)
+            {
+                Console.WriteLine("※ RhythmManager : PlayOneMeasure에서 b_Events의 크기가 16이 아님");
+                return;
+            }
+
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             for (int i = 0; i < 16; i++)
@@ -41,7 +52,7 @@ namespace RhythmDoctor.Managers
 
                 while (stopwatch.Elapsed.TotalSeconds < targetTime)
                 {
-                    // 반의 반박자 만큼 멈췄다 진행
+                    b_Events[i]?.Play(); // 비트이벤트가 null이 아닐 경우에만 Play
                 }
 
                 Console.WriteLine($"{i + 1}번째 반의 반박자");
