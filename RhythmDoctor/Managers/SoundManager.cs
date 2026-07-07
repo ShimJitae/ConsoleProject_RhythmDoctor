@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Media;
+using System.Numerics;
+using System.Text;
 
 namespace RhythmDoctor.Managers
 {
@@ -28,12 +29,25 @@ namespace RhythmDoctor.Managers
 
         private SoundManager()
         {
+            path = Path.Combine(AppContext.BaseDirectory, "Sounds");
         }
         #endregion
 
-        public void Play()
+        public void Play(string bgmName)
         {
+            string bgmPath = Path.Combine(path, bgmName);
 
+            if (!File.Exists(bgmPath))
+            {
+                Console.WriteLine($"음원 파일을 찾을 수 없습니다: {bgmPath}");
+                return;
+            }
+
+            bgmPlayer?.Stop();
+            bgmPlayer?.Dispose();
+
+            bgmPlayer = new SoundPlayer(bgmPath);
+            bgmPlayer.Play();
         }
 
         public void PlayOneShot()

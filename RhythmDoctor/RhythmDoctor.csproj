@@ -11,4 +11,14 @@
     <Folder Include="ReadMe\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Windows.Extensions" Version="10.0.9" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Sounds\**\*.wav">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 </Project>
