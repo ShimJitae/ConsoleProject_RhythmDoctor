@@ -6,7 +6,7 @@ namespace RhythmDoctor.Managers
 {
     public class InputManager
     {
-        #region 싱글톤 패턴 적용
+        #region 싱글톤 패턴 적용 및 생성자 구현
         private static InputManager instance;
 
         public static InputManager Instance
@@ -21,13 +21,21 @@ namespace RhythmDoctor.Managers
                 return instance;
             }
         }
+
+        private InputManager()
+        {
+            gm = GameManager.Instance;
+
+            gm.OnGameStart += Listen;
+
+            gm.OnGameOver += () => HasInput = false;
+        }
         #endregion
 
-        // 플레이어의 
+        GameManager gm;
+
         public void Listen()
         {
-            GameManager gm = GameManager.Instance;
-
             while (!gm.IsGameOver) // 게임 오버가 되기 전까지 실행
             {
                 // 키 입력이 없는데 Console.ReadKey를 바로 실행하면 프로그램이 키 입력을 기다리며 멈춰버림
@@ -43,6 +51,20 @@ namespace RhythmDoctor.Managers
             }
         }
 
-        public bool HasInput { get; set; } // 유저의 인풋이 들어왔는지 여부를 나타내는 bool 프로퍼티
+        // 유저의 인풋이 들어왔는지 여부를 나타내는 bool 프로퍼티
+        bool hasInput;
+        public bool HasInput {
+            get
+            {
+                if (gm.IsGameOver) // 게임 오버의 경우 무조건 false 반환
+                    return false;
+                else
+                    return hasInput;
+            }
+            set
+            {
+                hasInput = value;
+            }
+        }
     }
 }
