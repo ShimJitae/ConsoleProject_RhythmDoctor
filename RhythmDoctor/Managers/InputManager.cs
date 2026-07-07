@@ -26,8 +26,6 @@ namespace RhythmDoctor.Managers
         {
             gm = GameManager.Instance;
 
-            gm.OnGameStart += Listen;
-
             gm.OnGameOver += () => HasInput = false;
         }
         #endregion
@@ -36,17 +34,20 @@ namespace RhythmDoctor.Managers
 
         public void Listen()
         {
-            while (!gm.IsGameOver) // 게임 오버가 되기 전까지 실행
+            if (gm.IsGameOver)
             {
-                // 키 입력이 없는데 Console.ReadKey를 바로 실행하면 프로그램이 키 입력을 기다리며 멈춰버림
-                if (Console.KeyAvailable) // 현재 콘솔에 읽을 수 있는 키 입력이 있는지 확인
-                {
-                    ConsoleKeyInfo keyInfo = Console.ReadKey(true); // 입력된 키 정보를 읽고, 화면에는 표시하지 않음
+                HasInput = false;
+                return;
+            }
 
-                    if (keyInfo.Key == ConsoleKey.Spacebar || keyInfo.Key == ConsoleKey.B) // 입력된 키가 스페이스바인지 확인
-                    {
-                        HasInput = true; // 스페이스바 입력이 들어왔음을 표시
-                    }
+            // 키 입력이 없는데 Console.ReadKey를 바로 실행하면 프로그램이 키 입력을 기다리며 멈춰버림
+            if (Console.KeyAvailable) // 현재 콘솔에 읽을 수 있는 키 입력이 있는지 확인
+            {
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true); // 입력된 키 정보를 읽고, 화면에는 표시하지 않음
+
+                if (keyInfo.Key == ConsoleKey.Spacebar || keyInfo.Key == ConsoleKey.B) // 입력된 키가 스페이스바인지 확인
+                {
+                    HasInput = true; // 스페이스바 입력이 들어왔음을 표시
                 }
             }
         }

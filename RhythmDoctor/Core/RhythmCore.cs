@@ -80,6 +80,7 @@ namespace RhythmDoctor.Core
                 b_Events[i]?.Play(); // 비트이벤트가 null이 아닐 경우에만 Play
                 while (stopwatch.Elapsed.TotalSeconds < targetTime) // 비트 이벤트를 실행하고 반의 반박자만큼 대기
                 {
+                    InputManager.Instance.Listen();
                     Thread.Sleep(1); // while문이 CPU를 계속 쓰지 않도록 현재 스레드를 잠깐 쉬게 한다 -> 최적화
                 }
 
