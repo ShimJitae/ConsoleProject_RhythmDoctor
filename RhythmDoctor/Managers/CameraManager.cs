@@ -33,17 +33,6 @@ namespace RhythmDoctor.Managers
 
         private int screenWidth;
         private int screenHeight;
-
-        public void MoveGameWindowToCenter(int windowWidth, int windowHeight)
-        {
-            int x = (screenWidth - windowWidth) / 2;
-            int y = (screenHeight - windowHeight) / 2;
-
-            MoveGameWindow(x, y);
-        }
-
-        int windowWidth; // 현재 띄워진 윈도우 창의 가로 길이
-        int windowHeight; // 현재 띄워진 윈도우 창의 세로 길이
         #region ResizeWindow
         public void ResizeGameWindow(int width, int height)
         {
@@ -52,7 +41,8 @@ namespace RhythmDoctor.Managers
 
         private void ResizeFocusedWindow(int width, int height)
         {
-            Thread.Sleep(100);
+            windowWidth = width; // 현재 윈도우 창 크기의 가로길이 캐싱
+            windowHeight = height; // 현재 윈도우 창 크기의 세로길이 캐싱
 
             IntPtr windowHandle = GetForegroundWindow();
 
@@ -71,6 +61,9 @@ namespace RhythmDoctor.Managers
         }
         #endregion
 
+
+        int windowWidth; // 현재 띄워진 윈도우 창의 가로 길이
+        int windowHeight; // 현재 띄워진 윈도우 창의 세로 길이
         #region MoveWindow
         public void MoveGameWindow(int x, int y)
         {
@@ -79,8 +72,6 @@ namespace RhythmDoctor.Managers
 
         private void MoveFocusedWindow(int x, int y)
         {
-            Thread.Sleep(100);
-
             IntPtr windowHandle = GetForegroundWindow();
 
             if (windowHandle == IntPtr.Zero)
@@ -95,6 +86,13 @@ namespace RhythmDoctor.Managers
                 0,
                 SWP_NOZORDER | SWP_NOSIZE
             );
+        }
+        public void MoveGameWindowToCenter()
+        {
+            int x = (screenWidth - windowWidth) / 2;
+            int y = (screenHeight - windowHeight) / 2;
+
+            MoveGameWindow(x, y);
         }
         #endregion
 
