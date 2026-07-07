@@ -33,16 +33,20 @@ namespace RhythmDoctor.Managers
         /// </summary>
         public void PlayOneMeasure(BeatEvent[] b_Events)
         {
-            if(b_Events == null)
+            #region b_Events 형식 검사
+            // 이벤트 배열이 null이면 return
+            if (b_Events == null)
             {
                 Console.WriteLine("※ RhythmManager : PlayOneMeasure에서 b_Events로 Null을 받음");
                 return;
             }
+            // 이벤트 배열의 크기가 형식에 맞지 않으면 return
             if (b_Events.Length != 16)
             {
                 Console.WriteLine("※ RhythmManager : PlayOneMeasure에서 b_Events의 크기가 16이 아님");
                 return;
             }
+            #endregion
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
