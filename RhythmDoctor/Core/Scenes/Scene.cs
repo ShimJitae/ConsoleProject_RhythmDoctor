@@ -11,8 +11,11 @@ namespace RhythmDoctor.Core.Scenes
         Result
     }
 
-    public abstract class Scene
+    public class Scene
     {
-        public abstract void StartScene();
+        public virtual void StartScene()
+        {
+            Console.Clear();
+        }
     }
 }

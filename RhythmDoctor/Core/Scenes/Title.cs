@@ -8,6 +8,7 @@ namespace RhythmDoctor.Core.Scenes
     {
         public override void StartScene()
         {
+            base.StartScene();
         }
     }
 }
