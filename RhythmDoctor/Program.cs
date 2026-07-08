@@ -10,34 +10,17 @@ Console.InputEncoding = Encoding.UTF8;
 CameraManager.Instance.ResizeGameWindow(640, 360);
 CameraManager.Instance.MoveGameWindowToCenter();
 
-Console.WriteLine("██████╗ ██╗  ██╗██╗   ██╗████████╗██╗  ██╗███╗   ███╗   ");
-Console.WriteLine("██╔══██╗██║  ██║╚██╗ ██╔╝╚══██╔══╝██║  ██║████╗ ████║     ");
-Console.WriteLine("██████╔╝███████║ ╚████╔╝    ██║   ███████║██╔████╔██║      ");
-Console.WriteLine("██╔══██╗██╔══██║  ╚██╔╝     ██║   ██╔══██║██║╚██╔╝██║     ");
-Console.WriteLine("██║  ██║██║  ██║   ██║      ██║   ██║  ██║██║ ╚═╝ ██║        ");
-Console.WriteLine("╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝      ╚═╝   ╚═╝  ╚═╝╚═╝     ╚═╝       ");
-Console.WriteLine("         ██████╗  ██████╗  ██████╗████████╗ ██████╗ ██████╗ ");
-Console.WriteLine("         ██╔══██╗██╔═══██╗██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗");
-Console.WriteLine("         ██║  ██║██║   ██║██║        ██║   ██║   ██║██████╔╝");
-Console.WriteLine("         ██║  ██║██║   ██║██║        ██║   ██║   ██║██╔══██╗");
-Console.WriteLine("         ██████╔╝╚██████╔╝╚██████╗   ██║   ╚██████╔╝██║  ██║");
-Console.WriteLine("         ╚═════╝  ╚═════╝  ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝");
+CameraManager.Instance.UpdateRenderingLayer(RenderLayer.Background, "Title", 0, 0);
+CameraManager.Instance.RenderScreen();
+
+
+// 게임에서 마우스 커서 반짝임은 필요 없음. GameManager에서 감출거임
+Console.CursorVisible = false;
+
 Console.ReadLine();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//TestClass.Test();
+CameraManager.Instance.ActiveRendering(RenderLayer.Background, false);
+TestClass.Test();
 
 public static class TestClass
 {

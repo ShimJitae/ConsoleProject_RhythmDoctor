@@ -75,6 +75,9 @@ namespace RhythmDoctor.Core
                 //테스트용 코드
                 TestClass.NextBeat();
 
+                CameraManager.Instance.UpdateRenderingLayer(RenderLayer.TimingBar, $"TimingBar_{i%3+1}", 5, 2, ConsoleColor.Blue);
+                CameraManager.Instance.RenderScreen();
+
                 // 박자마다 HitBeat를 false로 전환해줌
                 HitBeat = false;
                 // 플레이어의 인풋을 받는 타이밍을 설정하는 것은 b_Events에서 전환해줌

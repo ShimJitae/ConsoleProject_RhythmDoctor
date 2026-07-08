@@ -1,5 +1,7 @@
-﻿using System;
+﻿using RhythmDoctor.Managers;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace RhythmDoctor.Core
@@ -7,128 +9,245 @@ namespace RhythmDoctor.Core
     // 실제 화면에 이미지(텍스트 파일)을 렌더링 해주는 코어
     public class ScreenRenderer
     {
-        /// <summary>
-        /// (int row, int col) pivot -> 이미지 제작을 시작할 피벗. 여기서부터 설정된 범위까지 문자열을 그려낸다.
-        /// </summary>
-        /// <param name="pivot"></param>
-
+        // (int row, int col) pivot -> 이미지 제작을 시작할 피벗. 여기서부터 설정된 범위까지 문자열을 그려낸다.
         Dictionary<RenderLayer, RenderingData> r_LayerDic;
-        StringBuilder output = new StringBuilder();
+        // 렌더링할 순서
+        readonly RenderLayer[] renderOrder = new RenderLayer[] { RenderLayer.UI, RenderLayer.Foreground, RenderLayer.TimingBar, RenderLayer.Background };
 
-        private ScreenRenderer()
+        public ScreenRenderer()
         {
             r_LayerDic = new Dictionary<RenderLayer, RenderingData>();
+
             r_LayerDic.Add(RenderLayer.Background, new RenderingData());
             r_LayerDic.Add(RenderLayer.TimingBar, new RenderingData());
             r_LayerDic.Add(RenderLayer.Foreground, new RenderingData());
             r_LayerDic.Add(RenderLayer.UI, new RenderingData());
         }
 
+        List<StringBuilder> output = new List<StringBuilder>();
+        List<ConsoleColor[]> outputColors = new List<ConsoleColor[]>();
         public void Render()
         {
-            // 최종적으로 그려낼 output에 순서대로 이미지를 그려낸다.
-            // output에 image_Background.Image 그리기
-            // output에 image_TimingBar.Image 그리기
-            // output에 image_Animation.Image 그리기
-            // output에 image_UI.Image 그리기
+            int width = Console.WindowWidth;
+            int height = Console.WindowHeight;
 
-            // 근데 반대로?
-            // UI -> Foreground -> TimingBar -> Background 순서로 그리고
-            // 이미 그려진 커서? 셀?을 bool타입으로 캐싱해두고,
-            // 뒤로 갈수록 이미지 그려졌다고 하면, 렌더링(Console.Write)를 멈추는 것도 최적화에 좋지 않을까?
+            if (width <= 0 || height <= 0)
+                return;
 
-            // 그리고 _renderingPosition에 해당하는 위치에 실행하고 있는 콘솔 창에 그려내기
+            Console.SetCursorPosition(0, 0);
+
+            for (int row = 0; row < height; row++)
+            {
+                if (row >= output.Count)
+                {
+                    output.Add(new StringBuilder());
+                    outputColors.Add(Array.Empty<ConsoleColor>());
+                }
+
+                StringBuilder sb = output[row];
+                ConsoleColor[] colors = EnsureRowState(row, width);
+
+                bool changed = false;
+
+                for (int col = 0; col < width; col++)
+                {
+                    bool hasRenderChar = TryGetRenderChar(row, col, out char loadedChar, out ConsoleColor loadedColor);
+                    char renderChar = hasRenderChar ? loadedChar : ' ';
+                    ConsoleColor renderColor = hasRenderChar ? loadedColor : ConsoleColor.Gray;
+
+                    if (sb[col] != renderChar || colors[col] != renderColor)
+                    {
+                        sb[col] = renderChar;
+                        colors[col] = renderColor;
+                        changed = true;
+                    }
+                }
+
+                if (!changed)
+                    continue;
+
+                Console.SetCursorPosition(0, row);
+
+                // 마지막 칸까지 쓰면 콘솔이 자동 줄바꿈/스크롤될 수 있어서 한 칸을 비운다.
+                int writeWidth = row == height - 1 ? Math.Max(0, width - 1) : width;
+                WriteRow(sb, colors, writeWidth);
+            }
+
+            Console.ResetColor();
+
+            ConsoleColor[] EnsureRowState(int row, int width)
+            {
+                StringBuilder sb = output[row];
+
+                if (sb.Length > width)
+                    sb.Length = width;
+
+                while (sb.Length < width)
+                {
+                    sb.Append(' ');
+                }
+
+                if (outputColors[row].Length != width)
+                {
+                    ConsoleColor[] resizedColors = new ConsoleColor[width];
+
+                    for (int i = 0; i < resizedColors.Length; i++)
+                    {
+                        resizedColors[i] = i < outputColors[row].Length ? outputColors[row][i] : ConsoleColor.Gray;
+                    }
+
+                    outputColors[row] = resizedColors;
+                }
+
+                return outputColors[row];
+            }
+
+            void WriteRow(StringBuilder sb, ConsoleColor[] colors, int writeWidth)
+            {
+                int startCol = 0;
+
+                while (startCol < writeWidth)
+                {
+                    ConsoleColor color = colors[startCol];
+                    int endCol = startCol + 1;
+
+                    while (endCol < writeWidth && colors[endCol] == color)
+                    {
+                        endCol++;
+                    }
+
+                    Console.ForegroundColor = color;
+                    Console.Write(sb.ToString(startCol, endCol - startCol));
+
+                    startCol = endCol;
+                }
+            }
         }
 
-        public void UpdateRD(RenderLayer rl, string imageName)
+        bool TryGetRenderChar(int row, int col, out char renderChar, out ConsoleColor renderColor)
         {
-            r_LayerDic[rl] = LoadRD(imageName);
+            renderChar = ' ';
+            renderColor = ConsoleColor.Gray;
+
+            foreach (RenderLayer layer in renderOrder)
+            {
+                RenderingData rd = r_LayerDic[layer];
+
+                if (rd.BlockRendering)
+                    continue;
+
+                int imageRow = row - rd.StartR;
+                int imageCol = col - rd.StartC;
+
+                if (imageRow < 0 || imageCol < 0)
+                    continue;
+
+                if (imageRow >= rd.ImageLines.Length)
+                    continue;
+
+                string imageLine = rd.ImageLines[imageRow];
+
+                if (imageCol >= imageLine.Length)
+                    continue;
+
+                char imageChar = imageLine[imageCol];
+
+                if (imageChar == ' ')
+                    continue;
+
+                renderChar = imageChar;
+                renderColor = rd.TextColor;
+                return true;
+            }
+
+            return false;
         }
 
-        /// <summary>
-        /// 실제 이미지를 로드해오는 메서드
-        /// </summary>
-        /// <returns></returns>
-        RenderingData LoadRD(string imageName)
+        public void UpdateRD(RenderLayer rl, string imageName, int startP_R, int startP_C)
         {
-            // 이미지 로드 및 파싱
+            UpdateRD(rl, imageName, startP_R, startP_C, ConsoleColor.Gray);
+        }
 
-            // onRD에 이미지 적용
+        public void ActiveRendering(RenderLayer target, bool enabled)
+        {
+            r_LayerDic[target].BlockRendering = !enabled;
+        }
 
-            return null;
+        public void UpdateRD(RenderLayer rl, string imageName, int startP_R, int startP_C, ConsoleColor textColor)
+        {
+            // 로드한 이미지가 다른 경우 아예 새로운 RenderingData 객체를 만든다.
+            if (!r_LayerDic[rl].ImageName.Equals(imageName))
+            {
+                r_LayerDic[rl] = new RenderingData(imageName, startP_R, startP_C, textColor);
+            }
+            // 이미지가 같은 경우, 시작점만 변경해준다.
+            else
+            {
+                r_LayerDic[rl].StartR = startP_R;
+                r_LayerDic[rl].StartC = startP_C;
+                r_LayerDic[rl].TextColor = textColor;
+            }
         }
     }
 
     public class RenderingData
-    { 
+    {
         // 로드해올 이미지의 이름
-        public string ImageName { get; set; }
+        public string ImageName { get; set; } = "";
         // 이미지를 적용할 레이어
         // 실제로 그릴 이미지 데이터
-        public StringBuilder Image { get; set; }
-        // 이미지를 어느 부분부터 그리기 시작할지 렌더링 피벗
-        public Vector2 RenderingPivot { get; set; }
+        public StringBuilder Image { get; set; } = new StringBuilder();
+        public string[] ImageLines { get; set; } = Array.Empty<string>();
         // 실제 콘솔창의 어느 위치에서부터 이미지를 그리기 시작할 것인지에 대한 포지션
-        public Vector2 RenderingPosition { get; set; }
+        public int StartR { get; set; }
+        public int StartC { get; set; }
+        public ConsoleColor TextColor { get; set; } = ConsoleColor.Gray;
+        //해당 레이어를 그릴지 안할지 여부를 정하는 bool 프로퍼티
+        public bool BlockRendering { get; set; } = false;
 
         public RenderingData()
         {
             ImageName = "";
             Image = new StringBuilder();
-            RenderingPivot = new Vector2(0, 0);
-            RenderingPosition = new Vector2(0, 0);
+            ImageLines = Array.Empty<string>();
+            StartR = 0;
+            StartC = 0;
+            TextColor = ConsoleColor.Gray;
         }
 
-        public RenderingData(string _ImageName, StringBuilder _Image, Vector2 _RenderingPivot, Vector2 _RenderingPosition)
+        public RenderingData(string _ImageName, int _StartR, int _StartC, ConsoleColor _TextColor)
         {
             ImageName = _ImageName;
-            Image = _Image;
-            RenderingPivot = _RenderingPivot;
-            RenderingPosition = _RenderingPosition;
+            string imageText = LoadImage(ImageName);
+            Image = new StringBuilder(imageText);
+            ImageLines = imageText.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n');
+
+            StartR = _StartR;
+            StartC = _StartC;
+            TextColor = _TextColor;
         }
 
-        public override bool Equals(object o)
+        /// <summary>
+        /// 실제 이미지를 로드해오는 메서드
+        /// </summary>
+        string LoadImage(string imageName)
         {
-            if (!(o is RenderingData rd))
-                return false;
+            if (string.IsNullOrWhiteSpace(imageName))
+                return string.Empty;
 
-            if (ReferenceEquals(rd, null))
-                return false;
+            // Images 폴더에서 {imageName}.txt 파일에서 텍스트를 로드해옴
+            string fileName = Path.GetFileNameWithoutExtension(imageName) + ".txt";
+            string projectImagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", fileName);
+            string outputImagePath = Path.Combine(AppContext.BaseDirectory, "Images", fileName);
 
-            return ImageName == rd.ImageName;
-        }
+            string imagePath = File.Exists(projectImagePath) ? projectImagePath : outputImagePath;
 
-        public override int GetHashCode()
-        {
-            return ImageName != null ? ImageName.GetHashCode() : 0;
-        }
+            if (!File.Exists(imagePath))
+                throw new FileNotFoundException($"이미지 파일을 찾을 수 없습니다: {fileName}", imagePath);
 
-        public static bool operator ==(RenderingData left, RenderingData right)
-        {
-            if (ReferenceEquals(left, right))
-                return true;
+            string imageText = File.ReadAllText(imagePath, Encoding.UTF8);
 
-            if (ReferenceEquals(left, null) || ReferenceEquals(right, null))
-                return false;
-
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(RenderingData left, RenderingData right)
-        {
-            return !(left == right);
-        }
-    }
-
-    public struct Vector2
-    {
-        public float x;
-        public float y;
-
-        public Vector2(int _y, int _x)
-        {
-            y = _y;
-            x = _x;
+            return imageText;
         }
     }
 
@@ -140,3 +259,5 @@ namespace RhythmDoctor.Core
         UI
     }
 }
+
+

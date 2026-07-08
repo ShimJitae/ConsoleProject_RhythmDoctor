@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using RhythmDoctor.Core;
 
 namespace RhythmDoctor.Managers
 {
@@ -31,6 +32,9 @@ namespace RhythmDoctor.Managers
         }
         #endregion
 
+        ScreenRenderer sr = new();
+
+        // 실제 모니터의 가로/세로 길이
         private int screenWidth;
         private int screenHeight;
         #region ResizeWindow
@@ -60,7 +64,6 @@ namespace RhythmDoctor.Managers
             );
         }
         #endregion
-
 
         int windowWidth; // 현재 띄워진 윈도우 창의 가로 길이
         int windowHeight; // 현재 띄워진 윈도우 창의 세로 길이
@@ -114,5 +117,30 @@ namespace RhythmDoctor.Managers
             uint uFlags
         );
         #endregion
+
+        public (int height, int width) GetWindowSize()
+        {
+            return (windowHeight, windowWidth);
+        }
+
+        public void UpdateRenderingLayer(RenderLayer rl, string imageName, int startP_R, int startP_C)
+        {
+            sr.UpdateRD(rl, imageName, startP_R, startP_C);
+        }
+
+        public void UpdateRenderingLayer(RenderLayer rl, string imageName, int startP_R, int startP_C, ConsoleColor textColor)
+        {
+            sr.UpdateRD(rl, imageName, startP_R, startP_C, textColor);
+        }
+
+        public void ActiveRendering(RenderLayer target, bool enabled)
+        {
+            sr.ActiveRendering(target, enabled);
+        }
+
+        public void RenderScreen()
+        {
+            sr.Render();
+        }
     }
 }

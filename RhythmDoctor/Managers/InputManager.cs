@@ -54,7 +54,8 @@ namespace RhythmDoctor.Managers
 
         // 유저의 인풋이 들어왔는지 여부를 나타내는 bool 프로퍼티
         bool hasInput;
-        public bool HasInput {
+        public bool HasInput
+        {
             get
             {
                 if (gm.IsGameOver) // 게임 오버의 경우 무조건 false 반환
