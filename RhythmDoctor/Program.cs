@@ -2,6 +2,10 @@
 using RhythmDoctor.Core.BeatEvents;
 using RhythmDoctor.Managers;
 using System.Threading;
+using System.Text;
+
+Console.OutputEncoding = Encoding.UTF8;
+Console.InputEncoding = Encoding.UTF8;
 
 CameraManager.Instance.ResizeGameWindow(640, 360);
 CameraManager.Instance.MoveGameWindowToCenter();
@@ -18,6 +22,7 @@ Console.WriteLine("         ██║  ██║██║   ██║██║  
 Console.WriteLine("         ██║  ██║██║   ██║██║        ██║   ██║   ██║██╔══██╗");
 Console.WriteLine("         ██████╔╝╚██████╔╝╚██████╗   ██║   ╚██████╔╝██║  ██║");
 Console.WriteLine("         ╚═════╝  ╚═════╝  ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝");
+Console.ReadLine();
 
 
 
