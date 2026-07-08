@@ -87,9 +87,9 @@ namespace RhythmDoctor.Core
             RenderingPosition = _RenderingPosition;
         }
 
-        public bool Equals(Object obj)
+        public override bool Equals(object o)
         {
-            if (!(obj is RenderingData rd))
+            if (!(o is RenderingData rd))
                 return false;
 
             if (ReferenceEquals(rd, null))
