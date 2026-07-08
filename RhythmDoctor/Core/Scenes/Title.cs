@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RhythmDoctor.Managers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +7,11 @@ namespace RhythmDoctor.Core.Scenes
 {
     public class Title : Scene
     {
+        private Title()
+        {
+            musicList = new() { "Test" };
+        }
+
         public override void StartScene()
         {
             base.StartScene();
@@ -19,6 +25,8 @@ namespace RhythmDoctor.Core.Scenes
         {
             // 우선 음악은 1개만 만들거지만, 추후 음악을 여러개 만들 업데이트를 고려하여 이렇게 메서드 초안을 구성했음
             selectedIndex = 0;
+
+            GameManager.Instance.SelectedMusic = musicList[selectedIndex];
         }
     }
 }
