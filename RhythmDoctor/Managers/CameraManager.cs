@@ -96,6 +96,7 @@ namespace RhythmDoctor.Managers
         }
         #endregion
 
+        #region 설정 정보?
         private const uint SWP_NOZORDER = 0x0004;
         private const uint SWP_NOSIZE = 0x0001;
 
@@ -112,5 +113,6 @@ namespace RhythmDoctor.Managers
             int cy,
             uint uFlags
         );
+        #endregion
     }
 }
