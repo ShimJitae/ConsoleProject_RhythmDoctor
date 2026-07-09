@@ -15,11 +15,11 @@ namespace RhythmDoctor.Core.BeatEvents
         public override void Play()
         {
             // 히트 타이밍을 켜준다
+            RhythmCore.Instance.HitBeat = true;
+
             CameraManager.Instance.UpdateRenderingLayer(RenderLayer.HitTiming, "HitTiming", start_R, start_C);
             CameraManager.Instance.ActiveRendering(RenderLayer.HitTiming, true);
             CameraManager.Instance.RenderScreen();
-
-            RhythmCore.Instance.HitBeat = true;
         }
 
         public ActiveHitBeat(int _start_R = 8, int _start_C = 45)
