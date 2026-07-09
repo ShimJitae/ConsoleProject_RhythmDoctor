@@ -1,4 +1,5 @@
 ﻿using RhythmDoctor.Core;
+using RhythmDoctor.Core.BeatEvents;
 using System;
 using System.Collections.Generic;
 using System.Text;
