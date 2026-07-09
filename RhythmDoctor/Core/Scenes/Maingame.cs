@@ -17,23 +17,35 @@ namespace RhythmDoctor.Core.Scenes
 
         void StartGame()
         {
+            GameManager.Instance.IsGameOver = false;
+
             // 히트 타이밍은 똑같은 이미지를 껐다 켰다 하면서만 쓸거니까 이렇게 구성
             CameraManager.Instance.UpdateRenderingLayer(RenderLayer.HitTiming, "HitTiming", 0, 0);
             CameraManager.Instance.ActiveRendering(RenderLayer.HitTiming, false);
 
+            CameraManager.Instance.ActiveRendering(RenderLayer.Background, true);
+            CameraManager.Instance.ActiveRendering(RenderLayer.TimingBar, true);
+            CameraManager.Instance.ActiveRendering(RenderLayer.UI, true);
+
+            CameraManager.Instance.UpdateRenderingLayer(RenderLayer.UI, "HP_1", 1, 3);
+
+            SoundManager.Instance.StopBGM();
             string musicName = "Dreams Dont Stop";
-            CameraManager.Instance.ActiveRendering(RenderLayer.Background, false);
             ParseEventDatas(musicName);
 
+            RhythmCore.Instance.failCount = 1;
             RhythmCore.Instance.SetRhythm(94);
             SoundManager.Instance.Play(musicName);
             string selectedMusic = GameManager.Instance.SelectedMusic;
 
-            for (int i = 0; i < eventDatas.Count; i++)
+            for (int i = 0; i < eventDatas.Count && !GameManager.Instance.IsGameOver; i++)
             {
                 Action[] beatEvents = GetParsedBeatEvents(i);
                 RhythmCore.Instance.PlayOneMeasure(beatEvents);
             }
+
+            RhythmCore.Instance.HitBeat = false;
+            SceneManager.Instance.ChangeScene(ScnenType.Result);
         }
 
         BeatEventParser beattEventParser = new();

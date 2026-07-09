@@ -18,6 +18,12 @@ namespace RhythmDoctor.Core.Scenes
 
             CameraManager.Instance.UpdateRenderingLayer(RenderLayer.Background, "Title", 1, 4);
             CameraManager.Instance.RenderScreen();
+
+            SoundManager.Instance.Play("Title");
+
+            Console.ReadLine();
+
+            SceneManager.Instance.ChangeScene(ScnenType.Maingame);
         }
 
         // 플레이할 수 있는 음악 리스트

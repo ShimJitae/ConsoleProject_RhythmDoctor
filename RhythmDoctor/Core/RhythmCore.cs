@@ -49,6 +49,7 @@ namespace RhythmDoctor.Core
         /// PlayOneMeasure()에서는 한 박자를 기준으로 만들어진 메서드
         /// for문에서 한 번에 반의 반박자 시간만큼 시간을 감지하고, 이를 16번 반복
         /// </summary>
+        public int failCount = 1;
         public void PlayOneMeasure(Action[] b_Events)
         {
             #region b_Events 형식 검사
@@ -67,8 +68,9 @@ namespace RhythmDoctor.Core
             #endregion
 
             Stopwatch stopwatch = Stopwatch.StartNew();
+            GameManager gm = GameManager.Instance;
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 16 && !gm.IsGameOver; i++)
             {
                 //테스트용 코드
                 //TestClass.NextBeat();
@@ -93,13 +95,20 @@ namespace RhythmDoctor.Core
 
                 if (HitBeat) // 히트 박스가 켜진 경우
                 {
-                    if (InputManager.Instance.HasInput)
+                    if (!InputManager.Instance.HasInput) // 플레이어가 인풋을 하지 않았다면
                     {
-                        //TestClass.Count(true);
-                    }
-                    else
-                    {
-                        //TestClass.Count(false);
+                        // 실패를 5번 이상 하면 바로 게임 오버
+                        failCount++;
+                        if (failCount >= 6)
+                        {
+                            gm.IsGameOver = true;
+                            SoundManager.Instance.StopBGM();
+                        }
+                        else
+                        {
+                            CameraManager.Instance.UpdateRenderingLayer(RenderLayer.UI, $"HP_{failCount}", 1, 3);
+                            CameraManager.Instance.RenderScreen();
+                        }
                     }
                 }
             }

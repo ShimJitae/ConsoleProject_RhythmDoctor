@@ -50,6 +50,14 @@ namespace RhythmDoctor.Managers
             bgmOutput.Play();
         }
 
+
+        public void StopBGM()
+        {
+            bgmOutput?.Stop();
+            bgmOutput?.Dispose();
+            bgmReader?.Dispose();
+        }
+
         public void PlayOneShot(string sfxName)
         {
             if (string.IsNullOrEmpty(sfxName))
@@ -69,6 +77,7 @@ namespace RhythmDoctor.Managers
                 sfxOutput.Dispose();
                 sfxReader.Dispose();
             };
+            sfxReader.Volume = 0.5f;
             sfxOutput.Play();
         }
 

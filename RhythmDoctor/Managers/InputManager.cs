@@ -25,8 +25,6 @@ namespace RhythmDoctor.Managers
         private InputManager()
         {
             gm = GameManager.Instance;
-
-            gm.OnGameOver += () => HasInput = false;
         }
         #endregion
 

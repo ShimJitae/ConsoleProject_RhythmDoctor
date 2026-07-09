@@ -66,6 +66,15 @@ namespace RhythmDoctor.Core.BeatEvents
                         return new PlaySFX(parameters[0]);
                     else
                         return new PlaySFX("");
+
+                case "ActiveRendering":
+                    if (parameters != null && parameters.Count == 2
+                        && Enum.TryParse<RenderLayer>(parameters[0], out RenderLayer p_AR_1)
+                        && bool.TryParse(parameters[1], out bool p_AR_2)
+                        )
+                        return new ActiveRendering(p_AR_1, p_AR_2);
+                    else
+                        return new ActiveRendering(RenderLayer.Background, true);
             }
 
             return null;
