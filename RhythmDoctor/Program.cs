@@ -10,7 +10,7 @@ Console.InputEncoding = Encoding.UTF8;
 CameraManager.Instance.ResizeGameWindow(640, 360);
 CameraManager.Instance.MoveGameWindowToCenter();
 
-CameraManager.Instance.UpdateRenderingLayer(RenderLayer.Background, "Title", 0, 0);
+CameraManager.Instance.UpdateRenderingLayer(RenderLayer.Background, "Title", 1, 4);
 CameraManager.Instance.RenderScreen();
 
 
