@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RhythmDoctor.Core.Scenes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -26,5 +27,24 @@ namespace RhythmDoctor.Managers
         {
         }
         #endregion
+
+        Dictionary<ScnenType, Scene> sceneDic = new Dictionary<ScnenType, Scene>()
+        {
+            { ScnenType.Title, new Title() },
+            { ScnenType.Maingame, new Maingame() },
+            { ScnenType.Result, new Result() }
+        };
+
+        public void ChangeScene(ScnenType st)
+        {
+            sceneDic[st].StartScene();
+        }
+    }
+
+    public enum ScnenType
+    {
+        Title,
+        Maingame,
+        Result
     }
 }

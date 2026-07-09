@@ -7,125 +7,112 @@ using System.Text;
 Console.OutputEncoding = Encoding.UTF8;
 Console.InputEncoding = Encoding.UTF8;
 
-CameraManager.Instance.ResizeGameWindow(640, 360);
-CameraManager.Instance.MoveGameWindowToCenter();
-
-CameraManager.Instance.UpdateRenderingLayer(RenderLayer.Background, "Title", 1, 4);
-CameraManager.Instance.RenderScreen();
-
-
-// 게임에서 마우스 커서 반짝임은 필요 없음. GameManager에서 감출거임
-Console.CursorVisible = false;
+SceneManager.Instance.ChangeScene(ScnenType.Title);
 
 Console.ReadLine();
 
-CameraManager.Instance.ActiveRendering(RenderLayer.Background, false);
-TestClass.Test();
+SceneManager.Instance.ChangeScene(ScnenType.Maingame);
 
-public static class TestClass
-{
-    static BeatEvent[] testEvents = new BeatEvent[16]
-    {
-        null, null, new ActiveHitBeat(), null,
-        null, null, new ActiveHitBeat(), null,
-        null, null, new ActiveHitBeat(), null,
-        null, null, new ActiveHitBeat(), null
-    };
+//CameraManager.Instance.ActiveRendering(RenderLayer.Background, false);
+//TestClass.Test();
 
-    static string testStr = "□ □ ■ □ □ □ ■ □ □ □ ■ □ □ □ ■ □";
-    static int beatIndex = 0;
-    static int arrowLine = -1;
-    static int successLine = -1;
-    static int failLine = -1;
-    static int logLine = -1;
-    public static void Test()
-    {
-        Thread.Sleep(1000);
-        GameManager.Instance.StartGame();
+//public static class TestClass
+//{
 
-        RhythmCore.Instance.SetRhythm(94);
+//    static string testStr = "□ □ ■ □ □ □ ■ □ □ □ ■ □ □ □ ■ □";
+//    static int beatIndex = 0;
+//    static int arrowLine = -1;
+//    static int successLine = -1;
+//    static int failLine = -1;
+//    static int logLine = -1;
+//    public static void Test()
+//    {
+//        Thread.Sleep(1000);
+//        GameManager.Instance.StartGame();
 
-        for (int i = 0; i < 15; i++)
-        {
-            beatIndex = 0;
-            Console.Clear();
-            Console.WriteLine(testStr);
-            arrowLine = Console.CursorTop;
-            Console.WriteLine();
-            successLine = Console.CursorTop;
-            Console.WriteLine();
-            failLine = Console.CursorTop;
-            Console.WriteLine();
-            logLine = Console.CursorTop;
-            Console.WriteLine();
-            PrintCount();
+//        RhythmCore.Instance.SetRhythm(94);
 
-            RhythmCore.Instance.PlayOneMeasure(testEvents);
+//        for (int i = 0; i < 15; i++)
+//        {
+//            beatIndex = 0;
+//            Console.Clear();
+//            Console.WriteLine(testStr);
+//            arrowLine = Console.CursorTop;
+//            Console.WriteLine();
+//            successLine = Console.CursorTop;
+//            Console.WriteLine();
+//            failLine = Console.CursorTop;
+//            Console.WriteLine();
+//            logLine = Console.CursorTop;
+//            Console.WriteLine();
+//            PrintCount();
 
-            HideArrow();
-            ClearLine(logLine);
-        }
-    }
+//            RhythmCore.Instance.PlayOneMeasure(testEvents);
 
-    static int suc = 0, fail = 0;
-    public static void NextBeat()
-    {
-        if (beatIndex >= 16)
-            return;
+//            HideArrow();
+//            ClearLine(logLine);
+//        }
+//    }
 
-        if (arrowLine < 0)
-        {
-            Console.WriteLine(testStr);
-            arrowLine = Console.CursorTop;
-            Console.WriteLine();
-        }
+//    static int suc = 0, fail = 0;
+//    public static void NextBeat()
+//    {
+//        if (beatIndex >= 16)
+//            return;
 
-        Console.SetCursorPosition(0, arrowLine);
-        Console.Write(new string(' ', testStr.Length));
-        Console.SetCursorPosition(beatIndex * 2, arrowLine);
-        Console.Write("↑");
-        Console.SetCursorPosition(0, logLine);
+//        if (arrowLine < 0)
+//        {
+//            Console.WriteLine(testStr);
+//            arrowLine = Console.CursorTop;
+//            Console.WriteLine();
+//        }
 
-        beatIndex++;
-    }
+//        Console.SetCursorPosition(0, arrowLine);
+//        Console.Write(new string(' ', testStr.Length));
+//        Console.SetCursorPosition(beatIndex * 2, arrowLine);
+//        Console.Write("↑");
+//        Console.SetCursorPosition(0, logLine);
 
-    public static void Count(bool _suc)
-    {
-        if (_suc)
-            suc++;
-        else
-            fail++;
+//        beatIndex++;
+//    }
 
-        PrintCount();
-        Console.SetCursorPosition(0, logLine);
-    }
+//    public static void Count(bool _suc)
+//    {
+//        if (_suc)
+//            suc++;
+//        else
+//            fail++;
 
-    static void HideArrow()
-    {
-        if (arrowLine < 0)
-            return;
+//        PrintCount();
+//        Console.SetCursorPosition(0, logLine);
+//    }
 
-        Console.SetCursorPosition(0, arrowLine);
-        Console.Write(new string(' ', testStr.Length));
-        Console.SetCursorPosition(0, logLine);
-    }
+//    static void HideArrow()
+//    {
+//        if (arrowLine < 0)
+//            return;
 
-    static void PrintCount()
-    {
-        Console.SetCursorPosition(0, successLine);
-        Console.Write($"성공: {suc}   ");
-        Console.SetCursorPosition(0, failLine);
-        Console.Write($"실패: {fail}   ");
-    }
+//        Console.SetCursorPosition(0, arrowLine);
+//        Console.Write(new string(' ', testStr.Length));
+//        Console.SetCursorPosition(0, logLine);
+//    }
 
-    static void ClearLine(int line)
-    {
-        if (line < 0)
-            return;
+//    static void PrintCount()
+//    {
+//        Console.SetCursorPosition(0, successLine);
+//        Console.Write($"성공: {suc}   ");
+//        Console.SetCursorPosition(0, failLine);
+//        Console.Write($"실패: {fail}   ");
+//    }
 
-        Console.SetCursorPosition(0, line);
-        Console.Write(new string(' ', Console.WindowWidth - 1));
-        Console.SetCursorPosition(0, line);
-    }
-}
+//    static void ClearLine(int line)
+//    {
+//        if (line < 0)
+//            return;
+
+//        Console.SetCursorPosition(0, line);
+//        Console.Write(new string(' ', Console.WindowWidth - 1));
+//        Console.SetCursorPosition(0, line);
+//    }
+//}
 

@@ -7,7 +7,7 @@ namespace RhythmDoctor.Core.Scenes
 {
     public class Title : Scene
     {
-        private Title()
+        public Title()
         {
             musicList = new() { "Test" };
         }
@@ -15,6 +15,9 @@ namespace RhythmDoctor.Core.Scenes
         public override void StartScene()
         {
             base.StartScene();
+
+            CameraManager.Instance.UpdateRenderingLayer(RenderLayer.Background, "Title", 1, 4);
+            CameraManager.Instance.RenderScreen();
         }
 
         // 플레이할 수 있는 음악 리스트

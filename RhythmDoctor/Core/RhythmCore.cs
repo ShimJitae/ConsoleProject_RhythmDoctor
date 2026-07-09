@@ -48,8 +48,7 @@ namespace RhythmDoctor.Core
         /// 한 마디에 반의 반박자 16개가 있음
         /// PlayOneMeasure()에서는 한 박자를 기준으로 만들어진 메서드
         /// for문에서 한 번에 반의 반박자 시간만큼 시간을 감지하고, 이를 16번 반복
-        /// </summary>
-        public bool ProcessingOneMeasure { get; set; } = false;
+        /// </summary>\
         //public void PlayOneMeasure(Action[] b_Events)
         public void PlayOneMeasure(BeatEvent[] b_Events)
         {
@@ -66,15 +65,14 @@ namespace RhythmDoctor.Core
                 Console.WriteLine("※ RhythmManager : PlayOneMeasure에서 b_Events의 크기가 16이 아님");
                 return;
             }
-            #endregion
-            ProcessingOneMeasure = true;
+            #endregion\
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             for (int i = 0; i < 16; i++)
             {
                 //테스트용 코드
-                TestClass.NextBeat();
+                //TestClass.NextBeat();
 
                 // 박자마다 HitBeat를 false로 전환해줌
                 HitBeat = false;
@@ -97,16 +95,14 @@ namespace RhythmDoctor.Core
                 {
                     if (InputManager.Instance.HasInput)
                     {
-                        TestClass.Count(true);
+                        //TestClass.Count(true);
                     }
                     else
                     {
-                        TestClass.Count(false);
+                        //TestClass.Count(false);
                     }
                 }
             }
-
-            ProcessingOneMeasure = false;
         }
 
         /// <summary>
