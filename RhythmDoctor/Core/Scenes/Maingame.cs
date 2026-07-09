@@ -17,10 +17,10 @@ namespace RhythmDoctor.Core.Scenes
 
         BeatEvent[] testEvents = new BeatEvent[16]
     {
-        new RenderImage(RenderLayer.TimingBar, "TimingBar_2", 7, 3), new RenderImage(RenderLayer.TimingBar, "TimingBar_3", 7, 3), null, new RenderImage(RenderLayer.TimingBar, "TimingBar_1", 7, 3),
-        new RenderImage(RenderLayer.TimingBar, "TimingBar_2", 7, 3), new RenderImage(RenderLayer.TimingBar, "TimingBar_3", 7, 3), null, new RenderImage(RenderLayer.TimingBar, "TimingBar_1", 7, 3),
-        new RenderImage(RenderLayer.TimingBar, "TimingBar_2", 7, 3), new RenderImage(RenderLayer.TimingBar, "TimingBar_3", 7, 3), null, new RenderImage(RenderLayer.TimingBar, "TimingBar_1", 7, 3),
-        new RenderImage(RenderLayer.TimingBar, "TimingBar_2", 7, 3), new RenderImage(RenderLayer.TimingBar, "TimingBar_3", 7, 3), null, new RenderImage(RenderLayer.TimingBar, "TimingBar_1", 7, 3)
+        new SetTimingBar(2), new SetTimingBar(3), new SetTimingBar(1), null,
+        new SetTimingBar(2), new SetTimingBar(3), new SetTimingBar(1), null,
+        new SetTimingBar(2), new SetTimingBar(3), new SetTimingBar(1), null,
+        new SetTimingBar(2), new SetTimingBar(3), new SetTimingBar(1), null
     };
 
         void StartGame()
