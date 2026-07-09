@@ -26,6 +26,7 @@ namespace RhythmDoctor.Core.Scenes
         void StartGame()
         {
             CameraManager.Instance.ActiveRendering(RenderLayer.Background, false);
+            SoundManager.Instance.Play("Dreams Dont Stop");
             RhythmCore.Instance.SetRhythm(94);
             string selectedMusic = GameManager.Instance.SelectedMusic;
 

@@ -8,7 +8,7 @@ namespace RhythmDoctor.Managers
 {
     public class SoundManager
     {
-        string path = "";
+        string path = Path.Combine(AppContext.BaseDirectory, "Sounds");
         SoundPlayer bgmPlayer;
 
         #region 싱글톤 패턴 적용 및 생성자
@@ -27,14 +27,15 @@ namespace RhythmDoctor.Managers
             }
         }
 
-        private SoundManager()
+        public SoundManager()
         {
-            path = Path.Combine(AppContext.BaseDirectory, "Sounds");
         }
         #endregion
 
         public void Play(string bgmName)
         {
+            bgmName += ".wav";
+
             string bgmPath = Path.Combine(path, bgmName);
 
             if (!File.Exists(bgmPath))
