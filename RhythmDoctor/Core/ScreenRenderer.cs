@@ -12,7 +12,7 @@ namespace RhythmDoctor.Core
         // (int row, int col) pivot -> 이미지 제작을 시작할 피벗. 여기서부터 설정된 범위까지 문자열을 그려낸다.
         Dictionary<RenderLayer, RenderingData> r_LayerDic;
         // 렌더링할 순서
-        readonly RenderLayer[] renderOrder = new RenderLayer[] { RenderLayer.UI, RenderLayer.Foreground, RenderLayer.TimingBar, RenderLayer.Background };
+        readonly RenderLayer[] renderOrder = new RenderLayer[] { RenderLayer.UI, RenderLayer.Foreground, RenderLayer.HitTiming, RenderLayer.TimingBar, RenderLayer.Background };
 
         public ScreenRenderer()
         {
@@ -20,6 +20,7 @@ namespace RhythmDoctor.Core
 
             r_LayerDic.Add(RenderLayer.Background, new RenderingData());
             r_LayerDic.Add(RenderLayer.TimingBar, new RenderingData());
+            r_LayerDic.Add(RenderLayer.HitTiming, new RenderingData());
             r_LayerDic.Add(RenderLayer.Foreground, new RenderingData());
             r_LayerDic.Add(RenderLayer.UI, new RenderingData());
         }
@@ -205,7 +206,8 @@ namespace RhythmDoctor.Core
     public enum RenderLayer
     {
         Background, // 게임의 뒷 배경
-        TimingBar, // 플레이어가 입력을 넣을 타이밍을 보여주는 타이밍바
+        TimingBar, // 타이밍바
+        HitTiming, // 플레이어가 입력을 넣을 타이밍을 그려주는 레이어
         Foreground, // 타이밍 바 앞에 그릴 이미지
         UI
     }

@@ -78,6 +78,9 @@ namespace RhythmDoctor.Core
                 // 플레이어의 인풋을 받는 타이밍을 설정하는 것은 b_Events에서 전환해줌
                 InputManager.Instance.HasInput = false;
 
+                // 히트 타이밍은 항상 꺼준다. 추후 ActiveHitBeat에서 켜줌
+                CameraManager.Instance.ActiveRendering(RenderLayer.HitTiming, false);
+
                 targetTime = sixteenthBeatTime * (i + 1);
 
                 b_Events[i]?.Invoke();

@@ -53,7 +53,19 @@ namespace RhythmDoctor.Core.BeatEvents
                         return new RenderImage(p_RI_1, parameters[1], p_RI_3, p_RI_4);
                     else
                         return new RenderImage(RenderLayer.Background, "", 0, 0);
-                case "ActiveHitBeat": return new ActiveHitBeat();
+                case "ActiveHitBeat":
+                    if (parameters != null && parameters.Count == 2
+                    && int.TryParse(parameters[0], out int p_AHB_0)
+                    && int.TryParse(parameters[1], out int p_AHB_1)
+                    )
+                        return new ActiveHitBeat(p_AHB_0, p_AHB_1);
+                    else
+                        return new ActiveHitBeat();
+                case "PlaySFX":
+                    if (parameters != null && parameters.Count == 1)
+                        return new PlaySFX(parameters[0]);
+                    else
+                        return new PlaySFX("");
             }
 
             return null;

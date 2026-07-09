@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Media;
-using System.Numerics;
-using System.Runtime.InteropServices;
 using System.Text;
+using NAudio.Wave;
 
 namespace RhythmDoctor.Managers
 {
     public class SoundManager
     {
         string path = Path.Combine(AppContext.BaseDirectory, "Sounds");
-        SoundPlayer bgmPlayer;
-        string extension = ".wav";
+        WaveOutEvent? bgmOutput;
+        AudioFileReader? bgmReader;
+        string extension = ".mp3";
 
         #region 싱글톤 패턴 적용 및 생성자
         private static SoundManager instance;
@@ -36,22 +35,46 @@ namespace RhythmDoctor.Managers
 
         public void Play(string bgmName)
         {
-            bgmPlayer?.Stop();
-            bgmPlayer?.Dispose();
+            bgmOutput?.Stop();
+            bgmOutput?.Dispose();
+            bgmReader?.Dispose();
 
-            bgmPlayer = new SoundPlayer(GetSoundPath(bgmName));
-            bgmPlayer.Play();
+            string bgmPath = GetSoundPath(bgmName);
+
+            if (string.IsNullOrEmpty(bgmPath))
+                return;
+
+            bgmReader = new AudioFileReader(bgmPath);
+            bgmOutput = new WaveOutEvent();
+            bgmOutput.Init(bgmReader);
+            bgmOutput.Play();
         }
 
         public void PlayOneShot(string sfxName)
         {
-            SoundPlayer sfxPlayer = new SoundPlayer(GetSoundPath(sfxName));
-            sfxPlayer.Play();
+            if (string.IsNullOrEmpty(sfxName))
+                return;
+
+            string sfxPath = GetSoundPath(sfxName);
+
+            if (string.IsNullOrEmpty(sfxPath))
+                return;
+
+            AudioFileReader sfxReader = new AudioFileReader(sfxPath);
+            WaveOutEvent sfxOutput = new WaveOutEvent();
+
+            sfxOutput.Init(sfxReader);
+            sfxOutput.PlaybackStopped += (sender, args) =>
+            {
+                sfxOutput.Dispose();
+                sfxReader.Dispose();
+            };
+            sfxOutput.Play();
         }
 
         string GetSoundPath(string soundName)
         {
-            soundName += ".wav";
+            soundName += extension;
 
             string soundPath = Path.Combine(path, soundName);
 

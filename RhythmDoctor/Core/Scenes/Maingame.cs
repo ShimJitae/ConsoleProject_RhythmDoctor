@@ -17,6 +17,10 @@ namespace RhythmDoctor.Core.Scenes
 
         void StartGame()
         {
+            // 히트 타이밍은 똑같은 이미지를 껐다 켰다 하면서만 쓸거니까 이렇게 구성
+            CameraManager.Instance.UpdateRenderingLayer(RenderLayer.HitTiming, "HitTiming", 0, 0);
+            CameraManager.Instance.ActiveRendering(RenderLayer.HitTiming, false);
+
             string musicName = "Dreams Dont Stop";
             CameraManager.Instance.ActiveRendering(RenderLayer.Background, false);
             ParseEventDatas(musicName);
@@ -42,7 +46,7 @@ namespace RhythmDoctor.Core.Scenes
             // 각 박자마다 여러개의 이벤트들을 가지게 할거임.
             eventDatas.Clear();
 
-            string fileName = Path.GetFileNameWithoutExtension(musicName) + ".csv";
+            string fileName = Path.GetFileNameWithoutExtension(musicName) + " - 메인 시트.csv";
             string projectMusicDataPath = Path.Combine(Directory.GetCurrentDirectory(), "MusicData", fileName);
             string outputMusicDataPath = Path.Combine(AppContext.BaseDirectory, "MusicData", fileName);
             string musicDataPath = File.Exists(projectMusicDataPath) ? projectMusicDataPath : outputMusicDataPath;
