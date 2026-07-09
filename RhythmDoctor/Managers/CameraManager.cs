@@ -128,11 +128,6 @@ namespace RhythmDoctor.Managers
             sr.UpdateRD(rl, imageName, startP_R, startP_C);
         }
 
-        public void UpdateRenderingLayer(RenderLayer rl, string imageName, int startP_R, int startP_C, ConsoleColor textColor)
-        {
-            sr.UpdateRD(rl, imageName, startP_R, startP_C, textColor);
-        }
-
         public void ActiveRendering(RenderLayer target, bool enabled)
         {
             sr.ActiveRendering(target, enabled);

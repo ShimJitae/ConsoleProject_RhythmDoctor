@@ -25,7 +25,6 @@ namespace RhythmDoctor.Core
         }
 
         List<StringBuilder> output = new List<StringBuilder>();
-        List<ConsoleColor[]> outputColors = new List<ConsoleColor[]>();
         public void Render()
         {
             int width = Console.WindowWidth;
@@ -41,24 +40,21 @@ namespace RhythmDoctor.Core
                 if (row >= output.Count)
                 {
                     output.Add(new StringBuilder());
-                    outputColors.Add(Array.Empty<ConsoleColor>());
                 }
 
                 StringBuilder sb = output[row];
-                ConsoleColor[] colors = EnsureRowState(row, width);
+                EnsureRowState(row, width);
 
                 bool changed = false;
 
                 for (int col = 0; col < width; col++)
                 {
-                    bool hasRenderChar = TryGetRenderChar(row, col, out char loadedChar, out ConsoleColor loadedColor);
+                    bool hasRenderChar = TryGetRenderChar(row, col, out char loadedChar);
                     char renderChar = hasRenderChar ? loadedChar : ' ';
-                    ConsoleColor renderColor = hasRenderChar ? loadedColor : ConsoleColor.Gray;
 
-                    if (sb[col] != renderChar || colors[col] != renderColor)
+                    if (sb[col] != renderChar)
                     {
                         sb[col] = renderChar;
-                        colors[col] = renderColor;
                         changed = true;
                     }
                 }
@@ -70,12 +66,10 @@ namespace RhythmDoctor.Core
 
                 // 마지막 칸까지 쓰면 콘솔이 자동 줄바꿈/스크롤될 수 있어서 한 칸을 비운다.
                 int writeWidth = row == height - 1 ? Math.Max(0, width - 1) : width;
-                WriteRow(sb, colors, writeWidth);
+                Console.Write(sb.ToString(0, writeWidth));
             }
 
-            Console.ResetColor();
-
-            ConsoleColor[] EnsureRowState(int row, int width)
+            void EnsureRowState(int row, int width)
             {
                 StringBuilder sb = output[row];
 
@@ -86,48 +80,12 @@ namespace RhythmDoctor.Core
                 {
                     sb.Append(' ');
                 }
-
-                if (outputColors[row].Length != width)
-                {
-                    ConsoleColor[] resizedColors = new ConsoleColor[width];
-
-                    for (int i = 0; i < resizedColors.Length; i++)
-                    {
-                        resizedColors[i] = i < outputColors[row].Length ? outputColors[row][i] : ConsoleColor.Gray;
-                    }
-
-                    outputColors[row] = resizedColors;
-                }
-
-                return outputColors[row];
-            }
-
-            void WriteRow(StringBuilder sb, ConsoleColor[] colors, int writeWidth)
-            {
-                int startCol = 0;
-
-                while (startCol < writeWidth)
-                {
-                    ConsoleColor color = colors[startCol];
-                    int endCol = startCol + 1;
-
-                    while (endCol < writeWidth && colors[endCol] == color)
-                    {
-                        endCol++;
-                    }
-
-                    Console.ForegroundColor = color;
-                    Console.Write(sb.ToString(startCol, endCol - startCol));
-
-                    startCol = endCol;
-                }
             }
         }
 
-        bool TryGetRenderChar(int row, int col, out char renderChar, out ConsoleColor renderColor)
+        bool TryGetRenderChar(int row, int col, out char renderChar)
         {
             renderChar = ' ';
-            renderColor = ConsoleColor.Gray;
 
             foreach (RenderLayer layer in renderOrder)
             {
@@ -156,7 +114,6 @@ namespace RhythmDoctor.Core
                     continue;
 
                 renderChar = imageChar;
-                renderColor = rd.TextColor;
                 return true;
             }
 
@@ -165,28 +122,22 @@ namespace RhythmDoctor.Core
 
         public void UpdateRD(RenderLayer rl, string imageName, int startP_R, int startP_C)
         {
-            UpdateRD(rl, imageName, startP_R, startP_C, ConsoleColor.Gray);
-        }
-
-        public void ActiveRendering(RenderLayer target, bool enabled)
-        {
-            r_LayerDic[target].BlockRendering = !enabled;
-        }
-
-        public void UpdateRD(RenderLayer rl, string imageName, int startP_R, int startP_C, ConsoleColor textColor)
-        {
             // 로드한 이미지가 다른 경우 아예 새로운 RenderingData 객체를 만든다.
             if (!r_LayerDic[rl].ImageName.Equals(imageName))
             {
-                r_LayerDic[rl] = new RenderingData(imageName, startP_R, startP_C, textColor);
+                r_LayerDic[rl] = new RenderingData(imageName, startP_R, startP_C);
             }
             // 이미지가 같은 경우, 시작점만 변경해준다.
             else
             {
                 r_LayerDic[rl].StartR = startP_R;
                 r_LayerDic[rl].StartC = startP_C;
-                r_LayerDic[rl].TextColor = textColor;
             }
+        }
+
+        public void ActiveRendering(RenderLayer target, bool enabled)
+        {
+            r_LayerDic[target].BlockRendering = !enabled;
         }
     }
 
@@ -201,7 +152,6 @@ namespace RhythmDoctor.Core
         // 실제 콘솔창의 어느 위치에서부터 이미지를 그리기 시작할 것인지에 대한 포지션
         public int StartR { get; set; }
         public int StartC { get; set; }
-        public ConsoleColor TextColor { get; set; } = ConsoleColor.Gray;
         //해당 레이어를 그릴지 안할지 여부를 정하는 bool 프로퍼티
         public bool BlockRendering { get; set; } = false;
 
@@ -212,10 +162,9 @@ namespace RhythmDoctor.Core
             ImageLines = Array.Empty<string>();
             StartR = 0;
             StartC = 0;
-            TextColor = ConsoleColor.Gray;
         }
 
-        public RenderingData(string _ImageName, int _StartR, int _StartC, ConsoleColor _TextColor)
+        public RenderingData(string _ImageName, int _StartR, int _StartC)
         {
             ImageName = _ImageName;
             string imageText = LoadImage(ImageName);
@@ -224,7 +173,6 @@ namespace RhythmDoctor.Core
 
             StartR = _StartR;
             StartC = _StartC;
-            TextColor = _TextColor;
         }
 
         /// <summary>
