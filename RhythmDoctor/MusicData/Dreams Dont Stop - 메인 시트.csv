@@ -1,5 +1,5 @@
 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
-SetTimingBar(2),SetTimingBar(1),ActiveHitBeat,,SetTimingBar(2),SetTimingBar(1),ActiveHitBeat,,SetTimingBar(2),SetTimingBar(1),ActiveHitBeat,,SetTimingBar(2),SetTimingBar(1),,
+SetTimingBar(2)/RenderImage(Background-Background_1-1-0),SetTimingBar(1),ActiveHitBeat,,SetTimingBar(2),SetTimingBar(1),ActiveHitBeat,,SetTimingBar(2),SetTimingBar(1),ActiveHitBeat,,SetTimingBar(2),SetTimingBar(1),,
 SetTimingBar(2),SetTimingBar(3),SetTimingBar(1),,SetTimingBar(2),SetTimingBar(3),SetTimingBar(1),,SetTimingBar(2)/PlaySFX(Rea),SetTimingBar(3),SetTimingBar(1)/PlaySFX(dy),,SetTimingBar(2)/PlaySFX(Get),SetTimingBar(3),SetTimingBar(1)/PlaySFX(Set),
 SetTimingBar(2)/PlaySFX(Go),SetTimingBar(1),ActiveHitBeat,,SetTimingBar(2),SetTimingBar(1),ActiveHitBeat,,SetTimingBar(2),SetTimingBar(1),ActiveHitBeat,,SetTimingBar(2),SetTimingBar(1),ActiveHitBeat,
 SetTimingBar(2),SetTimingBar(1),ActiveHitBeat,,SetTimingBar(2),SetTimingBar(1),ActiveHitBeat,,SetTimingBar(2),SetTimingBar(1),ActiveHitBeat,,SetTimingBar(2),SetTimingBar(1),PlaySFX(Stop)/ActiveHitBeat,

@@ -11,6 +11,7 @@ namespace RhythmDoctor.Core
     {
         // (int row, int col) pivot -> 이미지 제작을 시작할 피벗. 여기서부터 설정된 범위까지 문자열을 그려낸다.
         Dictionary<RenderLayer, RenderingData> r_LayerDic;
+        Dictionary<RenderLayer, ConsoleColor> c_LayerDic;
         // 렌더링할 순서
         readonly RenderLayer[] renderOrder = new RenderLayer[] { RenderLayer.UI, RenderLayer.Foreground, RenderLayer.HitTiming, RenderLayer.TimingBar, RenderLayer.Background };
 
@@ -23,6 +24,14 @@ namespace RhythmDoctor.Core
             r_LayerDic.Add(RenderLayer.HitTiming, new RenderingData());
             r_LayerDic.Add(RenderLayer.Foreground, new RenderingData());
             r_LayerDic.Add(RenderLayer.UI, new RenderingData());
+
+            c_LayerDic = new Dictionary<RenderLayer, ConsoleColor>();
+
+            c_LayerDic.Add(RenderLayer.Background, ConsoleColor.Yellow);
+            c_LayerDic.Add(RenderLayer.TimingBar, ConsoleColor.Red);
+            c_LayerDic.Add(RenderLayer.HitTiming, ConsoleColor.White);
+            c_LayerDic.Add(RenderLayer.Foreground, ConsoleColor.DarkRed);
+            c_LayerDic.Add(RenderLayer.UI, ConsoleColor.Magenta);
         }
 
         List<StringBuilder> output = new List<StringBuilder>();
