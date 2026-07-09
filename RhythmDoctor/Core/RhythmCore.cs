@@ -50,7 +50,7 @@ namespace RhythmDoctor.Core
         /// for문에서 한 번에 반의 반박자 시간만큼 시간을 감지하고, 이를 16번 반복
         /// </summary>
         public bool ProcessingOneMeasure { get; set; } = false;
-        public void PlayOneMeasure(BeatEvent[] b_Events)
+        public void PlayOneMeasure(Action[] b_Events)
         {
             #region b_Events 형식 검사
             // 이벤트 배열이 null이면 return
@@ -75,9 +75,6 @@ namespace RhythmDoctor.Core
                 //테스트용 코드
                 TestClass.NextBeat();
 
-                CameraManager.Instance.UpdateRenderingLayer(RenderLayer.TimingBar, $"TimingBar_{i%3+1}", 5, 2, ConsoleColor.Blue);
-                CameraManager.Instance.RenderScreen();
-
                 // 박자마다 HitBeat를 false로 전환해줌
                 HitBeat = false;
                 // 플레이어의 인풋을 받는 타이밍을 설정하는 것은 b_Events에서 전환해줌
@@ -85,7 +82,7 @@ namespace RhythmDoctor.Core
 
                 targetTime = sixteenthBeatTime * (i + 1);
 
-                b_Events[i]?.Play();
+                b_Events[i]?.Invoke();
 
                 while (stopwatch.Elapsed.TotalSeconds < targetTime)
                 {
