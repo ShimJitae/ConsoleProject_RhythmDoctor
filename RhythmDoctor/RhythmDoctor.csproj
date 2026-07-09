@@ -30,4 +30,12 @@
     <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
   </Content>
 </ItemGroup>
+	
+	<!-- 음악의 데이터 파일을 로드해오기 위한 설정 -->
+	<ItemGroup>
+		<Content Include="MusicData\**\*.csv">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 </Project>

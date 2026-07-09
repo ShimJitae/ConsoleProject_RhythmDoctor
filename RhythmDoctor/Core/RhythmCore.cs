@@ -48,9 +48,8 @@ namespace RhythmDoctor.Core
         /// 한 마디에 반의 반박자 16개가 있음
         /// PlayOneMeasure()에서는 한 박자를 기준으로 만들어진 메서드
         /// for문에서 한 번에 반의 반박자 시간만큼 시간을 감지하고, 이를 16번 반복
-        /// </summary>\
-        //public void PlayOneMeasure(Action[] b_Events)
-        public void PlayOneMeasure(BeatEvent[] b_Events)
+        /// </summary>
+        public void PlayOneMeasure(Action[] b_Events)
         {
             #region b_Events 형식 검사
             // 이벤트 배열이 null이면 return
@@ -65,7 +64,7 @@ namespace RhythmDoctor.Core
                 Console.WriteLine("※ RhythmManager : PlayOneMeasure에서 b_Events의 크기가 16이 아님");
                 return;
             }
-            #endregion\
+            #endregion
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -81,9 +80,7 @@ namespace RhythmDoctor.Core
 
                 targetTime = sixteenthBeatTime * (i + 1);
 
-                //b_Events[i]?.Invoke();
-
-                b_Events[i]?.Play();
+                b_Events[i]?.Invoke();
 
                 while (stopwatch.Elapsed.TotalSeconds < targetTime)
                 {
