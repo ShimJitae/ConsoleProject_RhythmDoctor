@@ -17,7 +17,7 @@
 
   <!-- 음원 파일을 로드해오기 위한 설정 -->
 	<ItemGroup>
-		<Content Include="Sounds\**\*.wav">
+		<Content Include="Sounds\**\*.wav;Sounds\**\*.mp3">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>

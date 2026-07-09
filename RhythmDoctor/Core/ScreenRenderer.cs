@@ -94,9 +94,12 @@ namespace RhythmDoctor.Core
                 if (rd.BlockRendering)
                     continue;
 
+                // 이미지가 그려질 위치, row는 현재 띄워진 콘솔창의 세로길이, col은 가로길이
+                // rd.StartR는 이미지를 그릴 시작 행, rd.StartC는 시작 열
                 int imageRow = row - rd.StartR;
                 int imageCol = col - rd.StartC;
 
+                // imageRow나 imageCol이 콘솔창을 벗어나면 글자를 출력하지 않음
                 if (imageRow < 0 || imageCol < 0)
                     continue;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Media;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace RhythmDoctor.Managers
@@ -10,6 +11,7 @@ namespace RhythmDoctor.Managers
     {
         string path = Path.Combine(AppContext.BaseDirectory, "Sounds");
         SoundPlayer bgmPlayer;
+        string extension = ".wav";
 
         #region 싱글톤 패턴 적용 및 생성자
         private static SoundManager instance;
@@ -34,26 +36,32 @@ namespace RhythmDoctor.Managers
 
         public void Play(string bgmName)
         {
-            bgmName += ".wav";
-
-            string bgmPath = Path.Combine(path, bgmName);
-
-            if (!File.Exists(bgmPath))
-            {
-                Console.WriteLine($"음원 파일을 찾을 수 없습니다: {bgmPath}");
-                return;
-            }
-
             bgmPlayer?.Stop();
             bgmPlayer?.Dispose();
 
-            bgmPlayer = new SoundPlayer(bgmPath);
+            bgmPlayer = new SoundPlayer(GetSoundPath(bgmName));
             bgmPlayer.Play();
         }
 
-        public void PlayOneShot()
+        public void PlayOneShot(string sfxName)
         {
+            SoundPlayer sfxPlayer = new SoundPlayer(GetSoundPath(sfxName));
+            sfxPlayer.Play();
+        }
 
+        string GetSoundPath(string soundName)
+        {
+            soundName += ".wav";
+
+            string soundPath = Path.Combine(path, soundName);
+
+            if (!File.Exists(soundPath))
+            {
+                Console.WriteLine($"음원 파일을 찾을 수 없습니다: {soundPath}");
+                return "";
+            }
+
+            return soundPath;
         }
     }
 }
